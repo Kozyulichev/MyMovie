@@ -1,0 +1,113 @@
+package com.example.mymovie.ui.main
+
+import android.annotation.SuppressLint
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.LinearLayout
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.mymovie.*
+import com.example.mymovie.databinding.MainFragmentBinding
+import com.google.android.material.snackbar.Snackbar
+
+class MainFragment : Fragment() {
+
+    private val lambdaNewView = { film: Film ->
+        val manager = activity?.supportFragmentManager
+        if (manager != null) {
+            val bundle = Bundle()
+            bundle.putParcelable(DetailsFragment.BUNDLE_EXTRA, film)
+            manager.beginTransaction()
+                .add(R.id.container, DetailsFragment.newInstance(bundle))
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
+        }
+    }
+
+
+    private var _binding: MainFragmentBinding? = null
+    private val binding get() = _binding!!
+
+
+    private lateinit var viewModel: MainViewModel
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var comedyRecyclerView: RecyclerView
+
+    private val comedyFilmAdapter = ComedyFilmAdapter(lambdaNewView)
+    private val filmAdapter = PopularFilmAdapter(lambdaNewView)
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = MainFragmentBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        viewModel.getLiveData().observe(viewLifecycleOwner, Observer { renderData(it) })
+        viewModel.getFilmsFromLocalSource()
+
+    }
+
+    private fun renderData(appState: AppState) {
+        when (appState) {
+            is AppState.Success -> {
+                val popularFilmData = appState.popularFilmData
+                val comedyFilmData = appState.comedyFilmData
+                binding.loadingLayout.visibility = View.GONE
+                setPopularFilmData(popularFilmData)
+                setComedyFilmData(comedyFilmData)
+            }
+            is AppState.Loading -> {
+                binding.loadingLayout.visibility = View.VISIBLE
+            }
+            is AppState.Error -> {
+                binding.loadingLayout.visibility = View.GONE
+                Snackbar
+                    .make(binding.mainView, "Error", Snackbar.LENGTH_INDEFINITE)
+                    .setAction("Reload") { viewModel.getFilmsFromLocalSource() }
+                    .show()
+            }
+
+        }
+    }
+
+    @SuppressLint("WrongConstant")
+    private fun setComedyFilmData(comedyFilmData: List<Film>) {
+        comedyRecyclerView = binding.recyclerComedyFilm
+        comedyFilmAdapter.setFilms(comedyFilmData)
+        comedyRecyclerView.adapter = comedyFilmAdapter
+        val lm = LinearLayoutManager(context, LinearLayout.HORIZONTAL, false)
+        comedyRecyclerView.layoutManager = lm
+
+    }
+
+    @SuppressLint("WrongConstant")
+    private fun setPopularFilmData(film: List<Film>) {
+        recyclerView = binding.recyclerPopularFilm
+        filmAdapter.setFilms(film)
+        recyclerView.adapter = filmAdapter
+        val lm = LinearLayoutManager(context, LinearLayout.HORIZONTAL, false)
+        recyclerView.layoutManager = lm
+
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    companion object {
+        fun newInstance() = MainFragment()
+    }
+
+}
