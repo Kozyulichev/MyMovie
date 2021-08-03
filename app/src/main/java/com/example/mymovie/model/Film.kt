@@ -1,6 +1,7 @@
-package com.example.mymovie
+package com.example.mymovie.model
 
 import android.os.Parcelable
+import com.example.mymovie.R
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize

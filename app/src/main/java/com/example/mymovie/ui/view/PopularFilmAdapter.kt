@@ -1,4 +1,4 @@
-package com.example.mymovie
+package com.example.mymovie.ui.view
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,7 +6,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mymovie.ui.main.MainFragment
+import com.example.mymovie.R
+import com.example.mymovie.model.Film
 
 class PopularFilmAdapter(private var omItemViewClickListener: (Film) -> Unit) :
     RecyclerView.Adapter<PopularFilmAdapter.Holder>() {
@@ -41,9 +42,11 @@ class PopularFilmAdapter(private var omItemViewClickListener: (Film) -> Unit) :
         var descriptionFilm: TextView? = null
 
         init {
-            filmImage = itemView.findViewById(R.id.popular_film_image)
-            filmName = itemView.findViewById(R.id.popular_film_name)
-            descriptionFilm = itemView.findViewById(R.id.popular_film_description)
+            with(itemView) {
+                filmImage = findViewById(R.id.popular_film_image)
+                filmName = findViewById(R.id.popular_film_name)
+                descriptionFilm = findViewById(R.id.popular_film_description)
+            }
         }
 
         fun onBind(film: Film, position: Int) {

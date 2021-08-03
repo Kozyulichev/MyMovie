@@ -1,4 +1,4 @@
-package com.example.mymovie.ui.main
+package com.example.mymovie.ui.view
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -13,7 +13,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mymovie.*
 import com.example.mymovie.databinding.MainFragmentBinding
+import com.example.mymovie.viewModel.AppState
+import com.example.mymovie.viewModel.MainViewModel
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.main_fragment.*
 
 class MainFragment : Fragment() {
 
@@ -34,7 +37,9 @@ class MainFragment : Fragment() {
     private val binding get() = _binding!!
 
 
-    private lateinit var viewModel: MainViewModel
+    private val viewModel: MainViewModel by lazy {
+        ViewModelProvider(this).get(MainViewModel::class.java)
+    }
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var comedyRecyclerView: RecyclerView
@@ -52,7 +57,6 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         viewModel.getLiveData().observe(viewLifecycleOwner, Observer { renderData(it) })
         viewModel.getFilmsFromLocalSource()
 
@@ -63,15 +67,15 @@ class MainFragment : Fragment() {
             is AppState.Success -> {
                 val popularFilmData = appState.popularFilmData
                 val comedyFilmData = appState.comedyFilmData
-                binding.loadingLayout.visibility = View.GONE
+                loadingLayout.visibility = View.GONE
                 setPopularFilmData(popularFilmData)
                 setComedyFilmData(comedyFilmData)
             }
             is AppState.Loading -> {
-                binding.loadingLayout.visibility = View.VISIBLE
+                loadingLayout.visibility = View.VISIBLE
             }
             is AppState.Error -> {
-                binding.loadingLayout.visibility = View.GONE
+                loadingLayout.visibility = View.GONE
                 Snackbar
                     .make(binding.mainView, "Error", Snackbar.LENGTH_INDEFINITE)
                     .setAction("Reload") { viewModel.getFilmsFromLocalSource() }

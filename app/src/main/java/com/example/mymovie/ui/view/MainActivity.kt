@@ -1,8 +1,8 @@
-package com.example.mymovie
+package com.example.mymovie.ui.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.mymovie.ui.main.MainFragment
+import com.example.mymovie.R
 
 class MainActivity : AppCompatActivity() {
 

@@ -1,10 +1,9 @@
-package com.example.mymovie.ui.main
+package com.example.mymovie.viewModel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.mymovie.AppState
-import com.example.mymovie.Repository
-import com.example.mymovie.RepositoryImpl
+import com.example.mymovie.model.Repository
+import com.example.mymovie.model.RepositoryImpl
 import java.lang.Thread.sleep
 
 class MainViewModel(

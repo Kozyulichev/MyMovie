@@ -1,4 +1,4 @@
-package com.example.mymovie.ui.main
+package com.example.mymovie.ui.view
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,7 +7,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mymovie.Film
-import com.example.mymovie.OnItemViewClickListener
 import com.example.mymovie.R
 
 class ComedyFilmAdapter(private var omItemViewClickListener: (Film)->Unit) :
