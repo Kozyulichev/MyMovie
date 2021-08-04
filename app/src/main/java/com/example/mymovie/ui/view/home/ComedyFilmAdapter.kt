@@ -1,4 +1,4 @@
-package com.example.mymovie.ui.view
+package com.example.mymovie.ui.view.home
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,16 +6,18 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+
 import com.example.mymovie.R
-import com.example.mymovie.model.Film
+import com.example.mymovie.model.MovieDTO
+import com.example.mymovie.model.Result
 
-class PopularFilmAdapter(private var omItemViewClickListener: (Film) -> Unit) :
-    RecyclerView.Adapter<PopularFilmAdapter.Holder>() {
+class ComedyFilmAdapter(private var omItemViewClickListener: (Result)->Unit) :
+    RecyclerView.Adapter<ComedyFilmAdapter.Holder>() {
 
-    private var films: List<Film> = listOf()
+    private var films: List<Result> = listOf()
 
-    fun setFilms(data: List<Film>) {
-        films = data
+    fun setFilms(data: MovieDTO) {
+        films = data.results
         notifyDataSetChanged()
     }
 
@@ -39,22 +41,21 @@ class PopularFilmAdapter(private var omItemViewClickListener: (Film) -> Unit) :
 
         var filmImage: ImageView? = null
         var filmName: TextView? = null
+        var descriptionFilm: TextView? = null
 
         init {
-            with(itemView) {
-                filmImage = findViewById(R.id.popular_film_image)
-                filmName = findViewById(R.id.popular_film_name)
-            }
+            filmImage = itemView.findViewById(R.id.popular_film_image)
+            filmName = itemView.findViewById(R.id.popular_film_name)
         }
 
-        fun onBind(film: Film, position: Int) {
-
-            var filmsss = films[position]
-            var image = filmsss.image
-            filmImage?.setImageResource(image)
-            filmName?.text = film.name
+        fun onBind(film: Result, position: Int) {
+            filmImage?.setImageResource(R.drawable.friends)
+            filmName?.text = film.title
+            descriptionFilm?.text = film.overview
 
             itemView.setOnClickListener { omItemViewClickListener.invoke(film) }
+
+
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.example.mymovie.ui.view
+package com.example.mymovie.ui.view.home
 
 import android.annotation.SuppressLint
 import android.os.Build

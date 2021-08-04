@@ -12,13 +12,15 @@ import java.net.URL
 import java.util.stream.Collectors
 import javax.net.ssl.HttpsURLConnection
 
+private const val API_KEY = "eaa99c6fd63b5488a4816703a57c78f7"
+
 class FilmLoader(private val listener: FilmLoadListener) {
     @RequiresApi(Build.VERSION_CODES.N)
 
     fun loadNowPlayingFilms() {
         try {
             val uri =
-                URL("https://api.themoviedb.org/3/movie/popular?api_key=eaa99c6fd63b5488a4816703a57c78f7&language=ru-RU&page=1")
+                URL("https://api.themoviedb.org/3/movie/popular?api_key=$API_KEY&language=ru-RU")
             val handler = Handler()
             Thread(Runnable {
                 lateinit var urlConnection: HttpsURLConnection
