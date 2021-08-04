@@ -6,8 +6,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mymovie.Film
+
 import com.example.mymovie.R
+import com.example.mymovie.model.Film
 
 class ComedyFilmAdapter(private var omItemViewClickListener: (Film)->Unit) :
     RecyclerView.Adapter<ComedyFilmAdapter.Holder>() {
@@ -48,7 +49,6 @@ class ComedyFilmAdapter(private var omItemViewClickListener: (Film)->Unit) :
         }
 
         fun onBind(film: Film, position: Int) {
-
             var filmsss = films[position]
             var image = filmsss.image
             filmImage?.setImageResource(image)

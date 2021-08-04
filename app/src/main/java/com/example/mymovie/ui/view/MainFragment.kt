@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mymovie.*
 import com.example.mymovie.databinding.MainFragmentBinding
+import com.example.mymovie.model.Film
 import com.example.mymovie.viewModel.AppState
 import com.example.mymovie.viewModel.MainViewModel
 import com.google.android.material.snackbar.Snackbar
