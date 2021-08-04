@@ -39,13 +39,11 @@ class PopularFilmAdapter(private var omItemViewClickListener: (Film) -> Unit) :
 
         var filmImage: ImageView? = null
         var filmName: TextView? = null
-        var descriptionFilm: TextView? = null
 
         init {
             with(itemView) {
                 filmImage = findViewById(R.id.popular_film_image)
                 filmName = findViewById(R.id.popular_film_name)
-                descriptionFilm = findViewById(R.id.popular_film_description)
             }
         }
 
@@ -55,7 +53,6 @@ class PopularFilmAdapter(private var omItemViewClickListener: (Film) -> Unit) :
             var image = filmsss.image
             filmImage?.setImageResource(image)
             filmName?.text = film.name
-            descriptionFilm?.text = film.description
 
             itemView.setOnClickListener { omItemViewClickListener.invoke(film) }
         }

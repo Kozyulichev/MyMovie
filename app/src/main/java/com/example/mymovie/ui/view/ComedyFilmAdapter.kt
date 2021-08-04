@@ -9,14 +9,16 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.example.mymovie.R
 import com.example.mymovie.model.Film
+import com.example.mymovie.model.MovieDTO
+import com.example.mymovie.model.Result
 
-class ComedyFilmAdapter(private var omItemViewClickListener: (Film)->Unit) :
+class ComedyFilmAdapter(private var omItemViewClickListener: (Result)->Unit) :
     RecyclerView.Adapter<ComedyFilmAdapter.Holder>() {
 
-    private var films: List<Film> = listOf()
+    private var films: List<Result> = listOf()
 
-    fun setFilms(data: List<Film>) {
-        films = data
+    fun setFilms(data: MovieDTO) {
+        films = data.results
         notifyDataSetChanged()
     }
 
@@ -45,15 +47,12 @@ class ComedyFilmAdapter(private var omItemViewClickListener: (Film)->Unit) :
         init {
             filmImage = itemView.findViewById(R.id.popular_film_image)
             filmName = itemView.findViewById(R.id.popular_film_name)
-            descriptionFilm = itemView.findViewById(R.id.popular_film_description)
         }
 
-        fun onBind(film: Film, position: Int) {
-            var filmsss = films[position]
-            var image = filmsss.image
-            filmImage?.setImageResource(image)
-            filmName?.text = film.name
-            descriptionFilm?.text = film.description
+        fun onBind(film: Result, position: Int) {
+            filmImage?.setImageResource(R.drawable.friends)
+            filmName?.text = film.title
+            descriptionFilm?.text = film.overview
 
             itemView.setOnClickListener { omItemViewClickListener.invoke(film) }
 
