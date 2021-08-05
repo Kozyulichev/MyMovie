@@ -10,8 +10,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mymovie.R
 import com.example.mymovie.model.MovieDTO
 import com.example.mymovie.model.Result
+import com.squareup.picasso.Picasso
 
-class ComedyFilmAdapter(private var omItemViewClickListener: (Result)->Unit) :
+const val URL_IMAGE = "https://image.tmdb.org/t/p/w1280_and_h720_bestv2"
+
+class ComedyFilmAdapter(private var omItemViewClickListener: (Result) -> Unit) :
     RecyclerView.Adapter<ComedyFilmAdapter.Holder>() {
 
     private var films: List<Result> = listOf()
@@ -49,7 +52,11 @@ class ComedyFilmAdapter(private var omItemViewClickListener: (Result)->Unit) :
         }
 
         fun onBind(film: Result, position: Int) {
-            filmImage?.setImageResource(R.drawable.friends)
+            Picasso.get().load("$URL_IMAGE${film.poster_path}")
+                .placeholder(R.drawable.ic_launcher_background)
+                .error(R.drawable.ic_launcher_foreground)
+                .into(filmImage)
+            //filmImage?.setImageResource(R.drawable.friends)
             filmName?.text = film.title
             descriptionFilm?.text = film.overview
 
