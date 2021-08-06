@@ -8,8 +8,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mymovie.R
 import com.example.mymovie.model.Film
+import com.example.mymovie.model.Result
 
-class PopularFilmAdapter(private var omItemViewClickListener: (Film) -> Unit) :
+class PopularFilmAdapter(private var omItemViewClickListener: (Result) -> Unit) :
     RecyclerView.Adapter<PopularFilmAdapter.Holder>() {
 
     private var films: List<Film> = listOf()

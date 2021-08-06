@@ -32,12 +32,10 @@ class DetailsFragment : Fragment() {
         if (film!=null){
             binding.detailsName.text = film.title
             binding.detailsDescription.text = film.overview
-            //var image = film.image
             Picasso.get().load("$URL_IMAGE${film.poster_path}")
                 .placeholder(R.drawable.ic_launcher_background)
                 .error(R.drawable.ic_launcher_foreground)
                 .into(details_image)
-            //binding.detailsImage.setImageResource(film.poster_path)
             binding.reiting.text = film.vote_average.toString()
         }
 
