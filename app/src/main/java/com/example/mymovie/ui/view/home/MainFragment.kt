@@ -19,6 +19,7 @@ import com.example.mymovie.model.MovieDTO
 import com.example.mymovie.model.Result
 import com.example.mymovie.viewModel.AppState
 import com.example.mymovie.viewModel.MainViewModel
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.main_fragment.*
 
 class MainFragment : Fragment() {
@@ -79,10 +80,10 @@ class MainFragment : Fragment() {
             }
             is AppState.Error -> {
                 loadingLayout.visibility = View.GONE
-                /*Snackbar
+                Snackbar
                     .make(binding.mainView, "Error", Snackbar.LENGTH_INDEFINITE)
-                    .setAction("Reload") { viewModel.getFilmsFromLocalSource() }
-                    .show()*/
+                    .setAction("Reload") { viewModel.getMovieFromRemoteDataSource("ru-RU") }
+                    .show()
             }
 
         }
