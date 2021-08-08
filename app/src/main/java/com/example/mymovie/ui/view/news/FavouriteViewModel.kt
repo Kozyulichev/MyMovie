@@ -1,4 +1,4 @@
-package com.example.mymovie.ui.view.favorite
+package com.example.mymovie.ui.view.news
 
 import androidx.lifecycle.ViewModel
 

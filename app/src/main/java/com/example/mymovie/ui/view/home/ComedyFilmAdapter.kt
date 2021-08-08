@@ -26,7 +26,7 @@ class ComedyFilmAdapter(private var omItemViewClickListener: (Result) -> Unit) :
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
-        var v = LayoutInflater.from(parent.context)
+        val v = LayoutInflater.from(parent.context)
             .inflate(R.layout.popular_film_list, parent, false)
         return Holder(v)
     }
@@ -58,7 +58,7 @@ class ComedyFilmAdapter(private var omItemViewClickListener: (Result) -> Unit) :
                 .into(filmImage)
             //filmImage?.setImageResource(R.drawable.friends)
             filmName?.text = film.title
-            descriptionFilm?.text = film.overview
+            //descriptionFilm?.text = film.overview
 
             itemView.setOnClickListener { omItemViewClickListener.invoke(film) }
 

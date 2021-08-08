@@ -19,6 +19,6 @@ class RemoteDataSource {
         .build().create(MovieAPI::class.java)
 
     fun getMovieDetails(language: String, callback: Callback<MovieDTO>) {
-        movieAPI.getMovieRetrofit(API_KEY, language).enqueue(callback)
+        movieAPI.getMovieRetrofit(API_KEY, language,12).enqueue(callback)
     }
 }

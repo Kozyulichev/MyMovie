@@ -1,4 +1,4 @@
-package com.example.mymovie.ui.view.favorite
+package com.example.mymovie.ui.view.news
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -8,6 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.mymovie.R
 
+// В этом фрагменте я хотел вставить какое-то нормальное
+// api с новостями о фильмах, но не нашел ни одного такого апи(
+// пока не добрался до реализации этого фрагмента
+// думаю сделать его просто webView
 class FavouriteFragment : Fragment() {
 
     companion object {

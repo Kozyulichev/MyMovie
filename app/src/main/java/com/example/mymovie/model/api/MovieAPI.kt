@@ -9,6 +9,7 @@ interface MovieAPI {
     @GET("popular?")
     fun getMovieRetrofit(
         @Query("api_key")token:String,
-        @Query("language")language:String
+        @Query("language")language:String,
+        @Query("with_genres")id:Int
     ): Call<MovieDTO>
 }

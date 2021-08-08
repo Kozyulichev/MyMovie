@@ -49,8 +49,7 @@ class MainViewModel(
         }
 
         private fun checkResponse(serverResponse: MovieDTO): AppState {
-            var fact: List<Result> = listOf()
-            fact = serverResponse.results
+            var fact: List<Result> = serverResponse.results
             return if (fact == null) {
                 AppState.Error(Throwable(CORRUPTED_DATA))
             } else {

@@ -13,9 +13,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mymovie.*
+import com.example.mymovie.R
 import com.example.mymovie.databinding.MainFragmentBinding
-import com.example.mymovie.model.Film
 import com.example.mymovie.model.MovieDTO
 import com.example.mymovie.model.Result
 import com.example.mymovie.viewModel.AppState
@@ -23,18 +22,6 @@ import com.example.mymovie.viewModel.MainViewModel
 import kotlinx.android.synthetic.main.main_fragment.*
 
 class MainFragment : Fragment() {
-
-    private val lambdaNewViewInternet = { film: Result ->
-        val manager = activity?.supportFragmentManager
-        if (manager != null) {
-            val bundle = Bundle()
-            bundle.putParcelable(DetailsFragment.BUNDLE_EXTRA, film)
-            manager.beginTransaction()
-                .replace(R.id.nav_host_fragment_activity_main, DetailsFragment.newInstance(bundle))
-                .addToBackStack(null)
-                .commitAllowingStateLoss()
-        }
-    }
 
     private var _binding: MainFragmentBinding? = null
     private val binding get() = _binding!!
@@ -47,8 +34,21 @@ class MainFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var comedyRecyclerView: RecyclerView
 
+
+    private val lambdaNewViewInternet = { film: Result ->
+        val manager = activity?.supportFragmentManager
+        if (manager != null) {
+            val bundle = Bundle()
+            bundle.putParcelable(DetailsFragment.BUNDLE_EXTRA, film)
+            manager.beginTransaction()
+                .replace(R.id.nav_host_fragment_activity_main, DetailsFragment.newInstance(bundle))
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
+        }
+    }
     private val comedyFilmAdapter = ComedyFilmAdapter(lambdaNewViewInternet)
     private val filmAdapter = PopularFilmAdapter(lambdaNewViewInternet)
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -69,9 +69,10 @@ class MainFragment : Fragment() {
         when (appState) {
             is AppState.Success -> {
                 val popularFilmData = appState.popularFilmData
-                //val comedyFilmData = appState.comedyFilmData
+                val comedyFilmData = appState.popularFilmData
                 loadingLayout.visibility = View.GONE
                 setComedyFilmData(popularFilmData)
+                setPopularFilmData(comedyFilmData)
             }
             is AppState.Loading -> {
                 loadingLayout.visibility = View.VISIBLE
@@ -98,7 +99,7 @@ class MainFragment : Fragment() {
     }
 
     @SuppressLint("WrongConstant")
-    private fun setPopularFilmData(film: List<Film>) {
+    private fun setPopularFilmData(film: MovieDTO) {
         recyclerView = binding.recyclerPopularFilm
         filmAdapter.setFilms(film)
         recyclerView.adapter = filmAdapter
