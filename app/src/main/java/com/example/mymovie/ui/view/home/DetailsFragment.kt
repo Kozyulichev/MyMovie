@@ -1,12 +1,16 @@
-package com.example.mymovie.ui.view
+package com.example.mymovie.ui.view.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.mymovie.R
 import com.example.mymovie.databinding.SecondFragmentBinding
 import com.example.mymovie.model.Film
+import com.example.mymovie.model.Result
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.second_fragment.*
 
 class DetailsFragment : Fragment() {
 
@@ -24,13 +28,15 @@ class DetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val film = arguments?.getParcelable<Film>(BUNDLE_EXTRA)
+        val film = arguments?.getParcelable<Result>(BUNDLE_EXTRA)
         if (film!=null){
-            binding.detailsName.text = film.name
-            binding.detailsDescription.text = film.description
-            var image = film.image
-            binding.detailsImage.setImageResource(image)
-            binding.reiting.text = film.reting.toString()
+            binding.detailsName.text = film.title
+            binding.detailsDescription.text = film.overview
+            Picasso.get().load("$URL_IMAGE${film.poster_path}")
+                .placeholder(R.drawable.ic_launcher_background)
+                .error(R.drawable.ic_launcher_foreground)
+                .into(details_image)
+            binding.reiting.text = film.vote_average.toString()
         }
 
     }

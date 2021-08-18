@@ -1,4 +1,4 @@
-package com.example.mymovie.ui.view
+package com.example.mymovie.ui.view.home
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,15 +7,17 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mymovie.R
-import com.example.mymovie.model.Film
+import com.example.mymovie.model.MovieDTO
+import com.example.mymovie.model.Result
+import com.squareup.picasso.Picasso
 
-class PopularFilmAdapter(private var omItemViewClickListener: (Film) -> Unit) :
+class PopularFilmAdapter(private var omItemViewClickListener: (Result) -> Unit) :
     RecyclerView.Adapter<PopularFilmAdapter.Holder>() {
 
-    private var films: List<Film> = listOf()
+    private var films: List<Result> = listOf()
 
-    fun setFilms(data: List<Film>) {
-        films = data
+    fun setFilms(data: MovieDTO) {
+        films = data.results
         notifyDataSetChanged()
     }
 
@@ -27,7 +29,7 @@ class PopularFilmAdapter(private var omItemViewClickListener: (Film) -> Unit) :
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
-        holder.onBind(films[position], position)
+        holder.onBind(films[position])
 
     }
 
@@ -39,24 +41,20 @@ class PopularFilmAdapter(private var omItemViewClickListener: (Film) -> Unit) :
 
         var filmImage: ImageView? = null
         var filmName: TextView? = null
-        var descriptionFilm: TextView? = null
 
         init {
             with(itemView) {
                 filmImage = findViewById(R.id.popular_film_image)
                 filmName = findViewById(R.id.popular_film_name)
-                descriptionFilm = findViewById(R.id.popular_film_description)
             }
         }
 
-        fun onBind(film: Film, position: Int) {
-
-            var filmsss = films[position]
-            var image = filmsss.image
-            filmImage?.setImageResource(image)
-            filmName?.text = film.name
-            descriptionFilm?.text = film.description
-
+        fun onBind(film: Result) {
+            Picasso.get().load("$URL_IMAGE${film.poster_path}")
+                .placeholder(R.drawable.ic_launcher_background)
+                .error(R.drawable.ic_launcher_foreground)
+                .into(filmImage)
+            filmName?.text = film.title
             itemView.setOnClickListener { omItemViewClickListener.invoke(film) }
         }
     }

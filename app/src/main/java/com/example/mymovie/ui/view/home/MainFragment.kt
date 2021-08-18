@@ -1,37 +1,28 @@
-package com.example.mymovie.ui.view
+package com.example.mymovie.ui.view.home
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mymovie.*
+import com.example.mymovie.R
 import com.example.mymovie.databinding.MainFragmentBinding
+import com.example.mymovie.model.MovieDTO
+import com.example.mymovie.model.Result
 import com.example.mymovie.viewModel.AppState
 import com.example.mymovie.viewModel.MainViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.main_fragment.*
 
 class MainFragment : Fragment() {
-
-    private val lambdaNewView = { film: Film ->
-        val manager = activity?.supportFragmentManager
-        if (manager != null) {
-            val bundle = Bundle()
-            bundle.putParcelable(DetailsFragment.BUNDLE_EXTRA, film)
-            manager.beginTransaction()
-                .add(R.id.container, DetailsFragment.newInstance(bundle))
-                .addToBackStack(null)
-                .commitAllowingStateLoss()
-        }
-    }
-
 
     private var _binding: MainFragmentBinding? = null
     private val binding get() = _binding!!
@@ -44,8 +35,21 @@ class MainFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var comedyRecyclerView: RecyclerView
 
-    private val comedyFilmAdapter = ComedyFilmAdapter(lambdaNewView)
-    private val filmAdapter = PopularFilmAdapter(lambdaNewView)
+
+    private val lambdaNewViewInternet = { film: Result ->
+        val manager = activity?.supportFragmentManager
+        if (manager != null) {
+            val bundle = Bundle()
+            bundle.putParcelable(DetailsFragment.BUNDLE_EXTRA, film)
+            manager.beginTransaction()
+                .replace(R.id.nav_host_fragment_activity_main, DetailsFragment.newInstance(bundle))
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
+        }
+    }
+    private val comedyFilmAdapter = ComedyFilmAdapter(lambdaNewViewInternet)
+    private val filmAdapter = PopularFilmAdapter(lambdaNewViewInternet)
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,21 +59,21 @@ class MainFragment : Fragment() {
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getLiveData().observe(viewLifecycleOwner, Observer { renderData(it) })
-        viewModel.getFilmsFromLocalSource()
-
+        viewModel.getMovieFromRemoteDataSource("ru-RU")
     }
 
     private fun renderData(appState: AppState) {
         when (appState) {
             is AppState.Success -> {
                 val popularFilmData = appState.popularFilmData
-                val comedyFilmData = appState.comedyFilmData
+                val comedyFilmData = appState.popularFilmData
                 loadingLayout.visibility = View.GONE
-                setPopularFilmData(popularFilmData)
-                setComedyFilmData(comedyFilmData)
+                setComedyFilmData(popularFilmData)
+                setPopularFilmData(comedyFilmData)
             }
             is AppState.Loading -> {
                 loadingLayout.visibility = View.VISIBLE
@@ -78,7 +82,7 @@ class MainFragment : Fragment() {
                 loadingLayout.visibility = View.GONE
                 Snackbar
                     .make(binding.mainView, "Error", Snackbar.LENGTH_INDEFINITE)
-                    .setAction("Reload") { viewModel.getFilmsFromLocalSource() }
+                    .setAction("Reload") { viewModel.getMovieFromRemoteDataSource("ru-RU") }
                     .show()
             }
 
@@ -86,7 +90,7 @@ class MainFragment : Fragment() {
     }
 
     @SuppressLint("WrongConstant")
-    private fun setComedyFilmData(comedyFilmData: List<Film>) {
+    private fun setComedyFilmData(comedyFilmData: MovieDTO) {
         comedyRecyclerView = binding.recyclerComedyFilm
         comedyFilmAdapter.setFilms(comedyFilmData)
         comedyRecyclerView.adapter = comedyFilmAdapter
@@ -96,7 +100,7 @@ class MainFragment : Fragment() {
     }
 
     @SuppressLint("WrongConstant")
-    private fun setPopularFilmData(film: List<Film>) {
+    private fun setPopularFilmData(film: MovieDTO) {
         recyclerView = binding.recyclerPopularFilm
         filmAdapter.setFilms(film)
         recyclerView.adapter = filmAdapter
